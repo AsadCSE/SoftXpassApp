@@ -15,7 +15,7 @@ createEntry.post('/', async (req, res) => {
                     site: req.body.site,
                     siteLogin: req.body.siteLogin,
                     sitePass: req.body.sitePass,
-                    sitenote: req.body.siteNote
+                    siteNote: req.body.siteNote
                 })
                 await User.findOneAndUpdate({_id: user._id}, {userVault})
                 res.send()
