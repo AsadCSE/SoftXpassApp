@@ -5,7 +5,7 @@ const User = require('../../models/UserModel')
 const createEntry = new express.Router()
 
 createEntry.post('/', async (req, res) => {
-    if(!!req.headers.bearer){
+    if(!!req.headers.bearer && req.body.siteNote.length < 101){
         jwt.verify(req.headers.bearer, process.env.JWTSECRET, async (err, data) => {
             if(err) {return res.status(406).send({Error: "not acceptable!"})}
             try {
@@ -14,7 +14,8 @@ createEntry.post('/', async (req, res) => {
                 userVault.push({
                     site: req.body.site,
                     siteLogin: req.body.siteLogin,
-                    sitePass: req.body.sitePass
+                    sitePass: req.body.sitePass,
+                    sitenote: req.body.siteNote
                 })
                 await User.findOneAndUpdate({_id: user._id}, {userVault})
                 res.send()

@@ -4,7 +4,7 @@ const User = require('../../models/UserModel')
 const updateEntry = new express.Router()
 
 updateEntry.post('/', async (req, res) => {
-    if(req.headers.bearer && req.body.updateId){
+    if(req.headers.bearer && req.body.updateId && req.body.siteNote.length < 101){
         jwt.verify(req.headers.bearer, process.env.JWTSECRET, async (err, data) => {
             if(err) {return res.status(406).send({Error: "not acceptable!"})}
             try {
@@ -14,7 +14,8 @@ updateEntry.post('/', async (req, res) => {
                 entries.push({
                     site: req.body.site,
                     siteLogin: req.body.siteLogin,
-                    sitePass: req.body.sitePass
+                    sitePass: req.body.sitePass,
+                    siteNote: req.body.siteNote
                 })
                 await User.findOneAndUpdate({_id: data.data}, {userVault: entries})
                 res.send()

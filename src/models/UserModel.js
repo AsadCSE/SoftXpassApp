@@ -18,6 +18,9 @@ const userSchema = new mongoose.Schema({
         },
         sitePass: {
             type: String
+        },
+        siteNote: {
+            type: String
         }
     },{
         timestamps: true
