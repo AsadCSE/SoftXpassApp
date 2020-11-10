@@ -18,10 +18,10 @@ create.post('/', async (req, res) => {
             const newUser = await saveUser.save()
             res.send({token: newUser.userToken})
         } catch(e) {
-            return res.status(409).send()
+            return res.status(409).send({Error: "Phone already exists!"})
         }
     }else{
-        res.status(400).send()
+        res.status(400).send({Error: "bad request!"})
     }
 })
 

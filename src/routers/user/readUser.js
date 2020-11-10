@@ -8,10 +8,10 @@ readUser.get('/', async (req, res) => {
     if(req.headers.bearer){
         const {data} = jwt.verify(req.headers.bearer, process.env.JWTSECRET)
         const user = await User.findOne({_id: data})
-        if(!user){return res.status(404).send()}
+        if(!user){return res.status(404).send({Error: "user not found!"})}
         return res.send(JSON.stringify({userPhone: user.userPhone}))
     }
-    res.status(400).send()
+    res.status(400).send({Error: "bad request!"})
 })
 
 module.exports = readUser
