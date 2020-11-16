@@ -11,10 +11,11 @@ updateEntry.post('/', async (req, res) => {
                 const user = await User.findOne({_id: data.data})
                 if(!user) {return res.status(404).send({Error: "user not found!"})}
                 const entries = user.userVault.filter((entry) => entry._id == req.body.updateId ? false : true)
+                const crypt = jwt.verify(req.body.sitePass, process.env.JWTSECRET)
                 entries.push({
                     site: req.body.site,
                     siteLogin: req.body.siteLogin,
-                    sitePass: req.body.sitePass,
+                    sitePass: crypt,
                     siteNote: req.body.siteNote
                 })
                 await User.findOneAndUpdate({_id: data.data}, {userVault: entries})

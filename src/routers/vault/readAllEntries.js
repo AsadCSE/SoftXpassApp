@@ -10,7 +10,17 @@ readEntries.get('/', async (req, res) => {
             try {
                 const user = await User.findOne({_id: data.data})
                 if(!user) {return res.status(404).send({Error: "user not found!"})}
-                res.send(JSON.stringify(user.userVault))
+                const dcrypted = user.userVault.map((entry) => {
+                    const dcrypt = jwt.verify(entry.sitePass, process.env.JWTSECRET)
+                    return {
+                        _id: entry._id,
+                        site: entry.site,
+                        siteLogin: entry.siteLogin,
+                        sitePass: dcrypt,
+                        siteNote: entry.siteNote
+                    }
+                })
+                res.send(JSON.stringify(dcrypted))
             }catch(e) {
                 res.status(500).send({Error: "server error!"})
             }

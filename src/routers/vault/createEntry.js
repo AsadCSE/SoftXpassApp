@@ -9,12 +9,14 @@ createEntry.post('/', async (req, res) => {
         jwt.verify(req.headers.bearer, process.env.JWTSECRET, async (err, data) => {
             if(err) {return res.status(406).send({Error: "not acceptable!"})}
             try {
+                const cryptPass = await jwt.sign(req.body.sitePass, process.env.JWTSECRET)
+
                 const user = await User.findOne({_id: data.data})
                 let userVault = user.userVault
                 userVault.push({
                     site: req.body.site,
                     siteLogin: req.body.siteLogin,
-                    sitePass: req.body.sitePass,
+                    sitePass: cryptPass,
                     siteNote: req.body.siteNote
                 })
                 await User.findOneAndUpdate({_id: user._id}, {userVault})
