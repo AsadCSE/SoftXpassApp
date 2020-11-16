@@ -4,7 +4,7 @@ const User = require('../../models/UserModel')
 const updateEntry = new express.Router()
 
 updateEntry.put('/', async (req, res) => {
-        if(req.headers.bearer && req.body.updateId && req.body.siteNote.length < 101 && req.body.sitePass){
+        if(req.headers.bearer && req.body.updateId && req.body.siteNote.length < 101 && req.body.sitePass && req.body.site){
         jwt.verify(req.headers.bearer, process.env.JWTSECRET, async (err, data) => {
             if(err) {return res.status(406).send({Error: "not acceptable!"})}
             try {
